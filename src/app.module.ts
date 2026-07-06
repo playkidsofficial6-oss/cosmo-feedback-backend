@@ -8,7 +8,7 @@ import { PatientsModule } from './patients/patients.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/cosmo-feedback'),
+    MongooseModule.forRoot('mongodb+srv://cosmo:Cosmo321@cosmo-feedback.utepw6b.mongodb.net/?appName=cosmo-feedback'),
     UsersModule,
     AuthModule,
     PatientsModule,
@@ -16,4 +16,4 @@ import { PatientsModule } from './patients/patients.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

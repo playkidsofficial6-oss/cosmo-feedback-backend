@@ -52,6 +52,42 @@ export class Patient {
 
   @Prop({ type: String, default: null })
   quickNotes: string | null;
+
+  @Prop({ type: String, default: null })
+  firstName: string | null;
+
+  @Prop({ type: String, default: null })
+  lastName: string | null;
+
+  @Prop({ type: String, default: null })
+  email: string | null;
+
+  @Prop({ type: String, default: null })
+  gender: string | null;
+
+  @Prop({ type: String, default: null })
+  age: string | null;
+
+  @Prop({ type: String, default: null })
+  streetAddress1: string | null;
+
+  @Prop({ type: String, default: null })
+  streetAddress2: string | null;
+
+  @Prop({ type: String, default: 'Nilambur' })
+  city: string;
+
+  @Prop({ type: String, default: null })
+  state: string | null;
+
+  @Prop({ type: String, default: null })
+  postalCode: string | null;
+
+  @Prop({ type: String, default: 'India' })
+  country: string;
+
+  @Prop({ type: String, default: null })
+  note: string | null;
 }
 
 export const PatientSchema = SchemaFactory.createForClass(Patient);

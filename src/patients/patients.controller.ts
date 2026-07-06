@@ -11,7 +11,7 @@ import { PatientsService } from './patients.service';
 
 @Controller('patients')
 export class PatientsController {
-  constructor(private readonly patientsService: PatientsService) {}
+  constructor(private readonly patientsService: PatientsService) { }
 
   @Get()
   async findAll() {
@@ -42,9 +42,5 @@ export class PatientsController {
     return { ...p, id: (p as any)._id.toString() };
   }
 
-  @Post('reset')
-  async reset() {
-    const patients = await this.patientsService.resetDatabase();
-    return patients.map((p) => ({ ...p, id: (p as any)._id.toString() }));
-  }
+
 }
