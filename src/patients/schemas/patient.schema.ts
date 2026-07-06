@@ -1,0 +1,57 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
+
+export type PatientDocument = HydratedDocument<Patient>;
+
+@Schema()
+export class Patient {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  phone: string;
+
+  @Prop({ required: true })
+  visitDate: string;
+
+  @Prop({ required: true })
+  visitTime: string;
+
+  @Prop({ required: true })
+  doctorName: string;
+
+  @Prop({ required: true })
+  treatmentCategory: string;
+
+  @Prop({ required: true })
+  patientType: string; // 'First Time Visitor', 'Returning Patient', etc.
+
+  @Prop({ type: String, default: null })
+  photoUrl: string | null;
+
+  @Prop({ required: true })
+  reviewStatus: string; // 'Pending', 'Yes', 'Declined'
+
+  @Prop({ type: Number, default: null })
+  reviewStars: number | null;
+
+  @Prop({ type: String, default: null })
+  reviewNotes: string | null;
+
+  @Prop({ type: String, default: null })
+  marketingSource: string | null;
+
+  @Prop({ type: [String], default: [] })
+  treatmentInterest: string[];
+
+  @Prop({ required: true })
+  purchaseStatus: string;
+
+  @Prop({ type: [String], default: [] })
+  vipTags: string[];
+
+  @Prop({ type: String, default: null })
+  quickNotes: string | null;
+}
+
+export const PatientSchema = SchemaFactory.createForClass(Patient);
