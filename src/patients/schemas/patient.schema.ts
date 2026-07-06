@@ -3,25 +3,13 @@ import { HydratedDocument } from 'mongoose';
 
 export type PatientDocument = HydratedDocument<Patient>;
 
-@Schema()
+@Schema({ timestamps: true, versionKey: false })
 export class Patient {
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
   phone: string;
-
-  @Prop({ required: true })
-  visitDate: string;
-
-  @Prop({ required: true })
-  visitTime: string;
-
-  @Prop({ required: true })
-  doctorName: string;
-
-  @Prop({ required: true })
-  treatmentCategory: string;
 
   @Prop({ required: true })
   patientType: string; // 'First Time Visitor', 'Returning Patient', etc.
@@ -40,9 +28,6 @@ export class Patient {
 
   @Prop({ type: String, default: null })
   marketingSource: string | null;
-
-  @Prop({ type: [String], default: [] })
-  treatmentInterest: string[];
 
   @Prop({ required: true })
   purchaseStatus: string;
@@ -88,6 +73,9 @@ export class Patient {
 
   @Prop({ type: String, default: null })
   note: string | null;
+
+  @Prop({ type: Number, unique: true })
+  pid: number;
 }
 
 export const PatientSchema = SchemaFactory.createForClass(Patient);
