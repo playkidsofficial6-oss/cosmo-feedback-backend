@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, UseGuards, Query } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -11,6 +11,13 @@ export class AppointmentsController {
   async findAll() {
     const appointments = await this.appointmentsService.findAll();
     return appointments.map((a) => ({ ...a, id: (a as any)._id.toString() }));
+  }
+
+  @Get('search')
+  async search(@Query() query: any) {
+    const result = await this.appointmentsService.search(query);
+    result.data = result.data.map((a: any) => ({ ...a, id: a._id.toString() }));
+    return result;
   }
 
   @Post()
