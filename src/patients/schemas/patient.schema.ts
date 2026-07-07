@@ -8,8 +8,8 @@ export class Patient {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  phone: string;
+  @Prop({ type: String, required: false, default: null })
+  phone: string | null;
 
   @Prop({ required: true })
   patientType: string; // 'First Time Visitor', 'Returning Patient', etc.
