@@ -13,13 +13,23 @@ export class AppointmentsService {
     return this.appointmentModel.find().populate('patient').populate('doctor').lean().exec();
   }
 
-  async create(appointmentData: any): Promise<AppointmentDocument> {
+  async create(appointmentData: any): Promise<any> {
     const createdAppointment = new this.appointmentModel(appointmentData);
-    return createdAppointment.save();
+    const saved = await createdAppointment.save();
+    return this.appointmentModel
+      .findById(saved._id)
+      .populate('patient')
+      .populate('doctor')
+      .exec();
   }
 
   async updateStatus(id: string, status: string): Promise<Appointment | null> {
-    return this.appointmentModel.findByIdAndUpdate(id, { status }, { new: true }).lean().exec();
+    return this.appointmentModel
+      .findByIdAndUpdate(id, { status }, { new: true })
+      .populate('patient')
+      .populate('doctor')
+      .lean()
+      .exec();
   }
 
   async search(query: any): Promise<{ data: Appointment[], total: number, page: number, totalPages: number }> {

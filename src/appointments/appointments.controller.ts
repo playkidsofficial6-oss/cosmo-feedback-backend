@@ -10,26 +10,43 @@ export class AppointmentsController {
   @Get()
   async findAll() {
     const appointments = await this.appointmentsService.findAll();
-    return appointments.map((a) => ({ ...a, id: (a as any)._id.toString() }));
+    return appointments.map((a) => ({
+      ...a,
+      id: (a as any)._id.toString(),
+      doctorName: (a.doctor as any)?.name || '',
+    }));
   }
 
   @Get('search')
   async search(@Query() query: any) {
     const result = await this.appointmentsService.search(query);
-    result.data = result.data.map((a: any) => ({ ...a, id: a._id.toString() }));
+    result.data = result.data.map((a: any) => ({
+      ...a,
+      id: a._id.toString(),
+      doctorName: a.doctor?.name || '',
+    }));
     return result;
   }
 
   @Post()
   async create(@Body() createAppointmentDto: any) {
     const a = await this.appointmentsService.create(createAppointmentDto);
-    return { ...a.toObject(), id: (a as any)._id.toString() };
+    const obj = a.toObject ? a.toObject() : a;
+    return {
+      ...obj,
+      id: (a as any)._id.toString(),
+      doctorName: obj.doctor?.name || '',
+    };
   }
 
   @Put(':id/status')
   async updateStatus(@Param('id') id: string, @Body('status') status: string) {
     const a = await this.appointmentsService.updateStatus(id, status);
     if (!a) throw new Error('Appointment not found');
-    return { ...a, id: (a as any)._id.toString() };
+    return {
+      ...a,
+      id: (a as any)._id.toString(),
+      doctorName: (a.doctor as any)?.name || '',
+    };
   }
 }
