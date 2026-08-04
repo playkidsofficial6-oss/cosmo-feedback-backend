@@ -10,7 +10,19 @@ export class AppointmentsService {
   ) {}
 
   async findAll(): Promise<Appointment[]> {
-    return this.appointmentModel.find().populate('patient').populate('doctor').lean().exec();
+    const activePatients = await this.appointmentModel.db.model('Patient')
+      .find({ isDeleted: { $ne: true } })
+      .select('_id')
+      .lean()
+      .exec();
+    const activePatientIds = activePatients.map(p => p._id);
+
+    return this.appointmentModel
+      .find({ patient: { $in: activePatientIds } })
+      .populate('patient')
+      .populate('doctor')
+      .lean()
+      .exec();
   }
 
   async create(appointmentData: any): Promise<any> {
@@ -36,7 +48,16 @@ export class AppointmentsService {
     const { page = 1, limit = 10, q, startDate, endDate, doctor, treatment, status } = query;
     const skip = (Number(page) - 1) * Number(limit);
 
-    const filter: any = {};
+    const activePatients = await this.appointmentModel.db.model('Patient')
+      .find({ isDeleted: { $ne: true } })
+      .select('_id')
+      .lean()
+      .exec();
+    const activePatientIds = activePatients.map(p => p._id);
+
+    const filter: any = {
+      patient: { $in: activePatientIds }
+    };
 
     if (startDate || endDate) {
       filter.createdAt = {};
@@ -65,10 +86,18 @@ export class AppointmentsService {
     }
 
     if (q) {
-       const patients = await this.appointmentModel.db.model('Patient').find({ name: { $regex: q, $options: 'i' } }).select('_id').lean().exec();
+       const patients = await this.appointmentModel.db.model('Patient')
+         .find({ name: { $regex: q, $options: 'i' }, isDeleted: { $ne: true } })
+         .select('_id')
+         .lean()
+         .exec();
        const patientIds = patients.map(p => p._id);
        
-       const doctors = await this.appointmentModel.db.model('Doctor').find({ name: { $regex: q, $options: 'i' } }).select('_id').lean().exec();
+       const doctors = await this.appointmentModel.db.model('Doctor')
+         .find({ name: { $regex: q, $options: 'i' }, isDeleted: { $ne: true } })
+         .select('_id')
+         .lean()
+         .exec();
        const doctorIds = doctors.map(d => d._id);
 
        filter.$or = [

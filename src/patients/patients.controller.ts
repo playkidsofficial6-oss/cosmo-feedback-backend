@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Body,
   Param,
   NotFoundException,
@@ -45,5 +46,11 @@ export class PatientsController {
     return { ...p, id: (p as any)._id.toString() };
   }
 
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    const p = await this.patientsService.softDelete(id);
+    if (!p) throw new NotFoundException('Patient not found');
+    return { message: 'Patient deleted successfully' };
+  }
 
 }

@@ -13,6 +13,12 @@ export class User {
 
   @Prop({ required: true })
   role: string; // reception, manager, admin
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop({ type: Date, default: null })
+  deletedAt: Date | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

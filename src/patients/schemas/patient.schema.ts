@@ -76,6 +76,12 @@ export class Patient {
 
   @Prop({ type: Number, unique: true })
   pid: number;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop({ type: Date, default: null })
+  deletedAt: Date | null;
 }
 
 export const PatientSchema = SchemaFactory.createForClass(Patient);
