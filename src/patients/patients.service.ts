@@ -14,7 +14,7 @@ export class PatientsService {
 
 
   async findAll(): Promise<Patient[]> {
-    return this.patientModel.find().lean().exec();
+    return this.patientModel.find({ isDeleted: { $ne: true } }).lean().exec();
   }
 
   async findOne(id: string): Promise<Patient | null> {
@@ -35,5 +35,14 @@ export class PatientsService {
       .exec();
   }
 
-
+  async softDelete(id: string): Promise<Patient | null> {
+    return this.patientModel
+      .findByIdAndUpdate(
+        id,
+        { isDeleted: true, deletedAt: new Date() },
+        { new: true },
+      )
+      .lean()
+      .exec();
+  }
 }
