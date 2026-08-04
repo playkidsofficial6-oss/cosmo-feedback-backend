@@ -22,7 +22,9 @@ export class PatientsService {
   }
 
   async create(patientData: any): Promise<PatientDocument> {
-    const createdPatient = new this.patientModel(patientData);
+    const lastPatient = await this.patientModel.findOne().sort({ pid: -1 }).exec();
+    const nextPid = lastPatient && lastPatient.pid ? lastPatient.pid + 1 : 1;
+    const createdPatient = new this.patientModel({ ...patientData, pid: nextPid });
     return createdPatient.save();
   }
 
